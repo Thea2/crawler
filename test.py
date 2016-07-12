@@ -12,3 +12,4 @@ f = open('dataSet/test', 'a')
 f.write('aaaaaaaaa'+'\n')
 f.write('bbbbbbbbb')
 f.close()
+

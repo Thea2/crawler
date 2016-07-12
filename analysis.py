@@ -6,7 +6,7 @@ import threading
 
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:35.0) Gecko/20100101 Firefox/35.0'}
 a = Momi.MoblieWeibo()
-a.login(13423625046, 'zhou970713')
+a.login(18826103516, '19950602')
 
 
 class analysis:
@@ -18,10 +18,10 @@ class analysis:
         self.sex_w = 0
         self.sex_m = 0
         self.sex_other = 0
-        self.age_80_before = 0
-        self.age_80 = 0
-        self.age_90 = 0
-        self.age_00 = 0
+        self.age_80_89 = 0
+        self.age_79 = 0
+        self.age_90_94 = 0
+        self.age_95 = 0
         self.age_other = 0
         self.area_list = ['其他', '北京', '天津', '上海', '重庆', '河北', '山西', '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽', '福建', '江西',
                           '山东', '河南', '湖北', '湖南', '广东', '海南', '四川', '贵州', '云南', '陕西', '甘肃', '青海', '台湾', '广西', '内蒙古',
@@ -122,14 +122,14 @@ class analysis:
             if age:    # 用户年龄段的统计
                 for age_ in age:
                     if age:
-                        if int(age_[0]) >= 2000:
-                            self.age_00 += 1
-                        elif int(age_[0]) >= 1990:
-                            self.age_90 += 1
-                        elif int(age_[0]) >= 1980:
-                            self.age_80 += 1
+                        if int(age_[0]) >= 1937:
+                            self.age_79 += 1
+                        elif int(age_[0]) >= 1927:
+                            self.age_80_89 += 1
+                        elif int(age_[0]) >= 1922:
+                            self.age_90_94 += 1
                         else:
-                            self.age_80_before += 1
+                            self.age_95 += 1
                     else:
                         self.age_other += 1
             else:
@@ -150,11 +150,11 @@ class analysis:
     def count_info_result(self):    # 将相关用户信息的统计结果写入文件
         f = open(self.file, 'a')
         f.write(self.keywords + '\n')
-        f.write('各年龄所占比例：' + '\n'
-                + '00后：' + str((self.age_00 / self.sum_num) * 100) + '%' + '\n'
-                + '90后：' + str((self.age_90 / self.sum_num) * 100) + '%' + '\n'
-                + '80后：' + str((self.age_80 / self.sum_num) * 100) + '%' + '\n'
-                + '80后以前：' + str((self.age_80_before / self.sum_num) * 100) + '%' + '\n'
+        f.write('各年龄段所占比例：' + '\n'
+                + '~79：' + str((self.age_79 / self.sum_num) * 100) + '%' + '\n'
+                + '80-89：' + str((self.age_80_89 / self.sum_num) * 100) + '%' + '\n'
+                + '90-94：' + str((self.age_90_94 / self.sum_num) * 100) + '%' + '\n'
+                + '95～：' + str((self.age_95 / self.sum_num) * 100) + '%' + '\n'
                 + '其他：' + str((self.age_other / self.sum_num) * 100) + '%' + '\n')
         f.write('各性别所占比例：' + '\n'
                 + '男：' + str((self.sex_m / self.sum_num) * 100) + '%' + '\n'
