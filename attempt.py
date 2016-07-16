@@ -4,12 +4,14 @@ import urllib2
 import re
 import Momi
 import threading
+import semantic
 
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:35.0) Gecko/20100101 Firefox/35.0'}
 a = Momi.MoblieWeibo()
-a.login(13423625046, 'zhou970713')
+a.login('oktong668an@163.com', 'pachong13')
 
-class get_hot_new:    # 获取某媒体热点新闻的类
+
+class GetNews:    # 获取某媒体热点新闻的类
 
     def __init__(self, baseURL, uid, file_name, page_num):
         """
@@ -55,7 +57,7 @@ class get_hot_new:    # 获取某媒体热点新闻的类
         pattern = re.compile('<.*?>')
         content = re.findall(content_pattern, page)
         for x in content:
-            if (x[1] > 20) and (x[2] > 20) and (x[3] > 20):    # x[0]为微博正文，x[1]为该博文赞的数量，x[2]为该博文转发的数量，x[3]为该博文评论的数量
+            if (x[1] > 50) and (x[2] > 100) and (x[3] > 50):    # x[0]为微博正文，x[1]为该博文赞的数量，x[2]为该博文转发的数量，x[3]为该博文评论的数量
                 if '>全文<' in x[0]:    # 若在当前网页不能显示微博全文则进一步获取正文全文
                     more_link = re.findall(more_link_pattern, x[0])
                     for link in more_link:
@@ -73,14 +75,17 @@ class get_hot_new:    # 获取某媒体热点新闻的类
                 print new
         return news
 
-    def start(self):    # 开始工作～（获取热点新闻并将其存入指定文件）
+    def save_data(self, new):    # 将热点新闻存入指定文件
         f = open(self.file_name, 'a')
+        f.write(new + '\n')
+        f.close()
+
+    def start(self):    # 开始工作～
         for i in range(int(self.page_num)):
-            page = self.get_page(i+1)
+            page = self.get_page(i + 1)
             news = self.get_new_content(page)
             for new in news:
-                f.write(new+'\n')
-        f.close()
+                self.save_data(new)
 
 
 if __name__ == '__main__':
@@ -92,7 +97,7 @@ if __name__ == '__main__':
              'yangshi': {'user_id': '2656274875', 'file_name': 'dataSet/yangshi'}}
     threads = []
     for m in media:
-        get_news = get_hot_new(base_url, media[m]['user_id'], media[m]['file_name'], 2)
+        get_news = GetNews(base_url, media[m]['user_id'], media[m]['file_name'], 2)
         t1 = threading.Thread(target=get_news.start())
         threads.append(t1)
     for t in threads:

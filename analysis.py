@@ -5,12 +5,14 @@ import Momi
 import threading
 
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:35.0) Gecko/20100101 Firefox/35.0'}
-a = Momi.MoblieWeibo()
-a.login(18826103516, '19950602')
+# a = Momi.MoblieWeibo()
+# a.login('gwkus48fei@163.com', 'pachong5')
 
 
-class analysis:
-    def __init__(self, keywords):    # 初始化
+class analysis(object):
+    def __init__(self, keywords, name, password):    # 初始化
+        a = Momi.MoblieWeibo()
+        a.login(name, password)
         self.base_url = 'http://weibo.cn/'
         self.keywords = keywords
         self.file = 'dataSet/analysis_result'
@@ -34,6 +36,49 @@ class analysis:
                           '2014年6月', '2014年5月', '2014年4月', '2014年3月', '2014年2月', '2014年1月',
                           '2013年12月', '2013年11月', '2013年10月', '2013年9月', '2013年8月', '2013年7月',
                           '2013年6月', '2013年5月', '2013年4月', '2013年3月', '2013年2月', '2013年1月']
+        self.time = {'2016年7月': {'starttime': '20160701', 'endtime': '20160731'},
+                     '2016年6月': {'starttime': '20160601', 'endtime': '20160631'},
+                     '2016年5月': {'starttime': '20160501', 'endtime': '20160531'},
+                     '2016年4月': {'starttime': '20160401', 'endtime': '20160431'},
+                     '2016年3月': {'starttime': '20160301', 'endtime': '20160331'},
+                     '2016年2月': {'starttime': '20160201', 'endtime': '20160231'},
+                     '2016年1月': {'starttime': '20160101', 'endtime': '20160131'},
+                     '2015年12月': {'starttime': '20151201', 'endtime': '20151231'},
+                     '2015年11月': {'starttime': '20151101', 'endtime': '20151131'},
+                     '2015年10月': {'starttime': '20151001', 'endtime': '20151031'},
+                     '2015年9月': {'starttime': '20150901', 'endtime': '20150931'},
+                     '2015年8月': {'starttime': '20150801', 'endtime': '20150831'},
+                     '2015年7月': {'starttime': '20150701', 'endtime': '20150731'},
+                     '2015年6月': {'starttime': '20150601', 'endtime': '20150631'},
+                     '2015年5月': {'starttime': '20150501', 'endtime': '20150531'},
+                     '2015年4月': {'starttime': '20150401', 'endtime': '20150431'},
+                     '2015年3月': {'starttime': '20150301', 'endtime': '20150331'},
+                     '2015年2月': {'starttime': '20150201', 'endtime': '20150231'},
+                     '2015年1月': {'starttime': '20150101', 'endtime': '20150131'},
+                     '2014年12月': {'starttime': '20141201', 'endtime': '20141231'},
+                     '2014年11月': {'starttime': '20141101', 'endtime': '20141131'},
+                     '2014年10月': {'starttime': '20141001', 'endtime': '20141031'},
+                     '2014年9月': {'starttime': '20140901', 'endtime': '20140931'},
+                     '2014年8月': {'starttime': '20140801', 'endtime': '20140831'},
+                     '2014年7月': {'starttime': '20140701', 'endtime': '20140731'},
+                     '2014年6月': {'starttime': '20140601', 'endtime': '20140631'},
+                     '2014年5月': {'starttime': '20140501', 'endtime': '20140531'},
+                     '2014年4月': {'starttime': '20140401', 'endtime': '20140431'},
+                     '2014年3月': {'starttime': '20140301', 'endtime': '20140331'},
+                     '2014年2月': {'starttime': '20140201', 'endtime': '20140231'},
+                     '2014年1月': {'starttime': '20140101', 'endtime': '20140131'},
+                     '2013年12月': {'starttime': '20131201', 'endtime': '20131231'},
+                     '2013年11月': {'starttime': '20131101', 'endtime': '20131131'},
+                     '2013年10月': {'starttime': '20131001', 'endtime': '20131031'},
+                     '2013年9月': {'starttime': '20130901', 'endtime': '20130931'},
+                     '2013年8月': {'starttime': '20130801', 'endtime': '20130831'},
+                     '2013年7月': {'starttime': '20130701', 'endtime': '20130731'},
+                     '2013年6月': {'starttime': '20130601', 'endtime': '20130631'},
+                     '2013年5月': {'starttime': '20130501', 'endtime': '20130531'},
+                     '2013年4月': {'starttime': '20130401', 'endtime': '20130431'},
+                     '2013年3月': {'starttime': '20130301', 'endtime': '20130331'},
+                     '2013年2月': {'starttime': '20130201', 'endtime': '20130231'},
+                     '2013年1月': {'starttime': '20130101', 'endtime': '20130131'}}
         self.time_num = [0] * len(self.time_list)
 
     def get_page(self, url):
@@ -122,11 +167,13 @@ class analysis:
             if age:    # 用户年龄段的统计
                 for age_ in age:
                     if age:
-                        if int(age_[0]) >= 1937:
+                        if int(age_[0]) == 0001:
+                            self.age_other += 1
+                        elif int(age_[0]) >= 1995:
                             self.age_79 += 1
-                        elif int(age_[0]) >= 1927:
+                        elif int(age_[0]) >= 1990:
                             self.age_80_89 += 1
-                        elif int(age_[0]) >= 1922:
+                        elif int(age_[0]) >= 1980:
                             self.age_90_94 += 1
                         else:
                             self.age_95 += 1
@@ -151,10 +198,10 @@ class analysis:
         f = open(self.file, 'a')
         f.write(self.keywords + '\n')
         f.write('各年龄段所占比例：' + '\n'
-                + '~79：' + str((self.age_79 / self.sum_num) * 100) + '%' + '\n'
-                + '80-89：' + str((self.age_80_89 / self.sum_num) * 100) + '%' + '\n'
-                + '90-94：' + str((self.age_90_94 / self.sum_num) * 100) + '%' + '\n'
-                + '95～：' + str((self.age_95 / self.sum_num) * 100) + '%' + '\n'
+                + '95～：' + str((self.age_79 / self.sum_num) * 100) + '%' + '\n'
+                + '90-94：' + str((self.age_80_89 / self.sum_num) * 100) + '%' + '\n'
+                + '80-89：' + str((self.age_90_94 / self.sum_num) * 100) + '%' + '\n'
+                + '~79：' + str((self.age_95 / self.sum_num) * 100) + '%' + '\n'
                 + '其他：' + str((self.age_other / self.sum_num) * 100) + '%' + '\n')
         f.write('各性别所占比例：' + '\n'
                 + '男：' + str((self.sex_m / self.sum_num) * 100) + '%' + '\n'
@@ -169,25 +216,35 @@ class analysis:
         f.close()
 
     def start(self):
-        for i in range(100):
-            page_num = i + 1
-            url = self.base_url + 'search/mblog?keyword=' + self.keywords + '&page=' + str(page_num)
-            search_page = self.get_page(url)
-            user_info = self.get_user_info(search_page)
-            self.collect_user_info(user_info)
-            self.count_time(search_page)
-            print 'page', i
+        for j in range(len(self.time_list)):
+            for i in range(100):
+                page_num = i + 1
+                url = self.base_url + 'search/mblog?keyword=' + self.keywords + '&starttime=' + self.time[self.time_list[j]]['starttime']\
+                      + '&endtime=' + self.time[self.time_list[j]]['endtime'] + '&page=' + str(page_num)
+                search_page = self.get_page(url)
+                user_info = self.get_user_info(search_page)
+                self.collect_user_info(user_info)
+                self.time_num[j] += len(user_info)
+                # self.count_time(search_page)
+                print 'page', i
+            print 'time', j
         self.count_info_result()
 
 
 if __name__ == '__main__':
     keyword_list = ['友谊的小船说翻就翻', '我要回农村', '城市套路深', '猴赛雷']
+    user_list = ['zpyan315fu@163.com', 'gzmaov96jing@163.com', 'rsba313shao@163.com', 'yowjingk26shi@163.com', 'gwkus48fei@163.com']
+    password_list = ['pachong1', 'pachong2', 'pachong3', 'pachong4', 'pachong5']
     threads = []
     for i in range(len(keyword_list)):
-        keyword_analysis = analysis(keyword_list[i])
+        keyword_analysis = analysis(keyword_list[i], user_list[i], password_list[i])
         t1 = threading.Thread(target=keyword_analysis.start())
         threads.append(t1)
     for t in threads:
         t.setDaemon(True)
         t.start()
     t.join()
+    # analysis(keyword_list[0], user_list[0], password_list[0]).start()
+    # analysis(keyword_list[1], user_list[1], password_list[1]).start()
+    # analysis(keyword_list[2], user_list[2], password_list[2]).start()
+    # analysis(keyword_list[3], user_list[3], password_list[3]).start()
