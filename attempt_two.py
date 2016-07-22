@@ -5,7 +5,7 @@ import cookielib
 import re
 
 
-def login():    # 未完成
+def login():    # 登陆学生个人中心查询成绩
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/49.0.2623.108 Chrome/49.0.2623.108 Safari/537.36'
     }

@@ -1,5 +1,5 @@
-__author__ = 'kalin'
 # coding=utf-8
+__author__ = 'kalin'
 from betweenness_centrality import *
 from collections import Counter
 from candidate_words import *
@@ -7,11 +7,12 @@ import os
 import time
 import jieba.analyse
 
+
 class Keyword():
 
     def __init__(self):
-        self.poss = {}   #词性表
-        self.word_length={}
+        self.poss = {}  # 词性表
+        self.word_length = {}
         self.word_score = {}
 
     def feature(self, string_data):
@@ -24,7 +25,7 @@ class Keyword():
             self.poss[s[0]] = s[1]
         po = self.poss
         candidate_words_dict, nword = CandidateWords().get_candidate_list(string_data)
-        nwword_words = nword.values()   #order words
+        nwword_words = nword.values()   # order words
         pos = {}
         for word in nwword_words:
             self.word_length[word] = len(word)/3
@@ -74,12 +75,17 @@ if __name__ == "__main__":
     string = '郑州大学的一位男生暗恋一位女生，这是他写给她的情书，真好，我都快融化了，真想知道他们在一起了吗？！'
     keyword_list = Keyword().keyword(string)
     for key in keyword_list:
-        print key,
+        for k in key:
+            print k
+        print 'a', key
     print '\n'
-    keyword_list = jieba.analyse.extract_tags(string)
-    for key in keyword_list:
-        print key,
-    print '\n'
+    for x in keyword_list[1]:
+        for a in x:
+            print a
+    # keyword_list = jieba.analyse.extract_tags(string)
+    # for key in keyword_list:
+    #     print key,
+    # print '\n'
     # bosonNLP(string)
 
 
